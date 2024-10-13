@@ -35,10 +35,12 @@ class Level(State):
             player_spritesheets,
             (100, 100)
         )
-        
-        self.background_color = (50, 50, 150) 
+       
+        # Load background image
+        self.background = pygame.image.load('assets/background.png').convert()
+        self.background = pygame.transform.scale(self.background, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-        self.generate_terrain()
+        #self.generate_terrain()
 
     def generate_terrain(self):
         x_offset = 50
@@ -69,6 +71,6 @@ class Level(State):
         self.player.update(self.terrain_sprites)
 
     def draw(self, screen):
-        screen.fill(self.background_color)
+        screen.blit(self.background, (0, 0))
         self.terrain_sprites.draw(screen)
         self.player.draw(screen)
