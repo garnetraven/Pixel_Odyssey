@@ -3,6 +3,8 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 FPS = 60
 
+TILESIZE = 32
+
 # Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -10,7 +12,10 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
-# Player settings
-PLAYER_WIDTH = 50
-PLAYER_HEIGHT = 60
-PLAYER_SPEED = 5
+# Player Settings
+PLAYER_SPEED = 3
+PLAYER_JUMP_POWER = 10
+
+# World Settings
+GRAVITY = 0.1
+TERMINAL_VELOCITY = 2
