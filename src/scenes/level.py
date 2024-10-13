@@ -1,14 +1,22 @@
-# level.py
 import pygame
 from utils.state import State
+from scenes.pause_menu import PauseMenu
 from entities.player import Player
 from config.constants import *
 from utils.texture_data import player_texture_data
+
+class Tile(pygame.sprite.Sprite):
+    def __init__(self, pos, size):
+        super().__init__()
+        self.image = pygame.Surface((size, size))
+        self.image.fill((139, 69, 19))  # Brown color for dirt
+        self.rect = self.image.get_rect(topleft = pos)
 
 class Level(State):
     def __init__(self, state_machine):
         super().__init__(state_machine)
         self.all_sprites = pygame.sprite.Group()
+        self.terrain_sprites = pygame.sprite.Group()
 
         # Load player spritesheets
         player_spritesheets = {}
@@ -30,6 +38,18 @@ class Level(State):
         
         self.background_color = (50, 50, 150) 
 
+        self.generate_terrain()
+
+    def generate_terrain(self):
+        x_offset = 50
+        y_offset = 200
+        for row in range(20):
+            for col in range(30):
+                x = col * TILESIZE
+                y = row * TILESIZE
+                tile = Tile((x + x_offset, y + y_offset), TILESIZE)
+                self.terrain_sprites.add(tile)
+                self.all_sprites.add(tile)
     def enter(self):
         print("Entering Level")
 
@@ -43,11 +63,12 @@ class Level(State):
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.state_machine.pop() 
+                    self.state_machine.push(PauseMenu(self.state_machine)) 
 
     def update(self):
-        self.player.update()
+        self.player.update(self.terrain_sprites)
 
     def draw(self, screen):
         screen.fill(self.background_color)
+        self.terrain_sprites.draw(screen)
         self.player.draw(screen)

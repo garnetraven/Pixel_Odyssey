@@ -29,7 +29,7 @@ class MainMenu(State):
                     self.selected = (self.selected + 1) % len(self.options)
                 elif event.key == pygame.K_RETURN:
                     if self.options[self.selected] == "Start Game":
-                        self.state_machine.change_state(Level(self.state_machine))
+                        self.state_machine.push(Level(self.state_machine))
                     elif self.options[self.selected] == "Options":
                         self.state_machine.push(OptionsMenu(self.state_machine))
                     elif self.options[self.selected] == "Quit":
@@ -42,6 +42,8 @@ class MainMenu(State):
 
     def draw(self, screen):
         """Render the main menu."""
+        
+
         screen.fill((0, 0, 0))  # Clear screen with black
         for idx, option in enumerate(self.options):
             color = (255, 255, 255) if idx == self.selected else (100, 100, 100)

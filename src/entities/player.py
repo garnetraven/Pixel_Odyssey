@@ -51,6 +51,27 @@ class Player(pygame.sprite.Sprite):
         if not self.facing_right:
             self.image = pygame.transform.flip(self.image, True, False)
 
+    def check_collisions(self, terrain_sprites):
+        self.is_grounded = False
+        for tile in terrain_sprites:
+            if self.rect.colliderect(tile.rect):
+                # Collision from above
+                if self.velocity.y > 0: 
+                    self.rect.bottom = tile.rect.top
+                    self.velocity.y = 0
+                    self.is_grounded = True
+                    self.is_jumping = False
+                # Collision from below
+                elif self.velocity.y < 0:
+                    self.rect.top = tile.rect.bottom
+                    self.velocity.y = 0
+                # Collision from the left
+                elif self.velocity.x > 0:
+                    self.rect.right = tile.rect.left
+                # Collision from the right
+                elif self.velocity.x < 0:
+                    self.rect.left = tile.rect.right
+
     def handle_input(self, keys):
         self.velocity.x = 0  
         new_animation = 'idle'
@@ -86,7 +107,7 @@ class Player(pygame.sprite.Sprite):
             self.is_jumping = True
             self.is_grounded = False
 
-    def update(self):
+    def update(self, terrain_sprites):
         # Apply gravity
         self.velocity.y += GRAVITY
 
@@ -97,6 +118,8 @@ class Player(pygame.sprite.Sprite):
         # Update position
         self.rect.x += int(self.velocity.x)
         self.rect.y += int(self.velocity.y)
+
+        self.check_collisions(terrain_sprites)
         
         # Keep the player within the screen bounds
         if self.rect.left < 0:
