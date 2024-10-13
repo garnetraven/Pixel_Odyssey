@@ -16,7 +16,6 @@ class StateMachine:
         if self.states:
             self.states[-1].enter() # Enter new current state
 
-
     def change_state(self, state):
         """Replace current state with new one"""
         self.pop()
@@ -30,6 +29,6 @@ class StateMachine:
         if self.states:
             self.states[-1].update(dt)
 
-    def render(self, screen):
+    def draw(self, screen):
         if self.states:
-            self.states[-1].render(screen)
+            self.states[-1].draw(screen)
