@@ -1,6 +1,7 @@
 import pygame
 from config.constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from utils.state import State
+from scenes.options_menu import OptionsMenu
 
 class MainMenu(State):
     def __init__(self, state_machine):
@@ -28,6 +29,8 @@ class MainMenu(State):
                 elif event.key == pygame.K_RETURN:
                     if self.options[self.selected] == "Start Game":
                         self.state_machine.change_state()
+                    elif self.options[self.selected] == "Options":
+                        self.state_machine.push(OptionsMenu(self.state_machine))
                     elif self.options[self.selected] == "Quit":
                         self.state_machine.pop()
                         pygame.quit()

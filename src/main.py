@@ -16,7 +16,7 @@ class Game:
 
     def run(self):
         while self.running:
-            dt = self.clock.tick(FPS) / 1000
+            dt = self.clock.tick(FPS) / 1000.0 # Converts milliseconds to seconds
             events = pygame.event.get()
             
             for event in events:
