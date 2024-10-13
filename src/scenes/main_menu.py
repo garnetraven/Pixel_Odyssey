@@ -1,6 +1,6 @@
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from state import State
+from config.constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from utils.state import State
 
 class MainMenu(State):
     def __init__(self, state_machine):

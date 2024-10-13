@@ -1,7 +1,7 @@
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS 
-from state_machine import StateMachine
-from main_menu import MainMenu
+from config.constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS 
+from utils.state_machine import StateMachine
+from scenes.main_menu import MainMenu
 
 class Game:
     def __init__(self):
