@@ -14,6 +14,7 @@ BLUE = (0, 0, 255)
 
 # Player Settings
 PLAYER_SPEED = 4
+PLAYER_SPRINT_SPEED = PLAYER_SPEED * 1.5
 PLAYER_JUMP_POWER = 5
 
 # World Settings

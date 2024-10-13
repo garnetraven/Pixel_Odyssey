@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
 
         # Player stats
         self.base_speed = PLAYER_SPEED
-        self.sprint_speed= PLAYER_SPEED * 1.5
+        self.sprint_speed= PLAYER_SPRINT_SPEED
         self.mass = 5
         self.terminal_velocity = self.mass * TERMINAL_VELOCITY
         self.jump_strength = PLAYER_JUMP_POWER
