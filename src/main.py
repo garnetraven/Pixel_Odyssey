@@ -12,22 +12,26 @@ class Game:
         self.running = True
 
         self.state_machine = StateMachine()
-        self.state_machine.push(MainMenu(self.state_machine))
+        self.state_machine.push(MainMenu(self.state_machine)) # Push initial state as Main Menu
 
     def run(self):
         while self.running:
-            dt = self.clock.tick(FPS) / 1000.0 # Converts milliseconds to seconds
             events = pygame.event.get()
-            
             for event in events:
                 if event.type == pygame.QUIT:
                     self.running = False
+
+            # Calculate delta time
+            dt = self.clock.tick(FPS) / 1000.0 # Converts milliseconds to seconds
             
+            # Handle events, update game state, and draw 
             self.state_machine.handle_events(events)
             self.state_machine.update(dt)
             self.state_machine.draw(self.screen)
 
             pygame.display.flip()
+
+            # Limit frame rate to FPS
             self.clock.tick(FPS)
 
         pygame.quit()
