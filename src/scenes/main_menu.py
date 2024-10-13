@@ -10,7 +10,13 @@ class MainMenu(State):
         self.font = pygame.font.SysFont("Arial", 48)
         self.options = ["Start Game", "Options", "Quit"]
         self.selected = 0
-
+        
+        # Load the logo
+        self.logo = pygame.image.load('assets/logo.png').convert_alpha()
+        self.logo_rect = self.logo.get_rect()
+        self.logo_rect.centerx = SCREEN_WIDTH // 2
+        self.logo_rect.top = 50
+    
     def enter(self):
         """Called when entering the main menu state."""
         print("Entering Main Menu")
@@ -42,9 +48,10 @@ class MainMenu(State):
 
     def draw(self, screen):
         """Render the main menu."""
-        
-
         screen.fill((0, 0, 0))  # Clear screen with black
+
+        screen.blit(self.logo, self.logo_rect)
+
         for idx, option in enumerate(self.options):
             color = (255, 255, 255) if idx == self.selected else (100, 100, 100)
             text = self.font.render(option, True, color)
