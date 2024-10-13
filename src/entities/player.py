@@ -2,11 +2,15 @@ import pygame
 from config.constants import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, groups, image: pygame.Surface, position: tuple) -> None:
+    def __init__(self, groups, spritesheets: dict, position: tuple) -> None:
         super().__init__(groups)
-        self.image = image
+        self.spritesheets = spritesheets
+        self.animations = self.load_animations()
+        self.current_frame = 0
+        self.animation_speed = 0.2
+        self.current_animation = 'idle'
+        self.image = self.animations['idle'][self.current_frame]
         self.rect = self.image.get_rect(topleft = position)
-        self.color = (0, 255, 0)  # Green color
         self.velocity = pygame.math.Vector2()
 
         # Player stats
@@ -20,10 +24,36 @@ class Player(pygame.sprite.Sprite):
         self.is_jumping = False
         self.is_grounded = False
         self.is_sprinting = False
+        self.facing_right = True 
+
+    def load_animations(self):
+        animations = {}
+        for key, data in self.spritesheets.items():
+            animations[key] = []
+            spritesheet = data['spritesheet']
+            frame_size = data['frame_size']
+            frames = data['frames']
+            scale = data['scale']
+            scaled_size = (int(frame_size[0] * scale), int(frame_size[1] * scale))
+            
+            for i in range(frames):
+                frame = pygame.Surface(frame_size, pygame.SRCALPHA)
+                frame.blit(spritesheet, (0, 0), (i * frame_size[0], 0, frame_size[0], frame_size[1]))
+                scaled_frame = pygame.transform.scale(frame, scaled_size)
+                animations[key].append(scaled_frame)
+        return animations
+
+    def animate(self):
+        self.current_frame += self.animation_speed
+        if self.current_frame >= len(self.animations[self.current_animation]):
+            self.current_frame = 0
+        self.image = self.animations[self.current_animation][int(self.current_frame)]
+        if not self.facing_right:
+            self.image = pygame.transform.flip(self.image, True, False)
 
     def handle_input(self, keys):
-        """Handle keyboard input for player movement."""
-        self.velocity.x = 0  # Reset horizontal velocity
+        self.velocity.x = 0  
+        new_animation = 'idle'
         
         # Check for sprint
         if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
@@ -35,10 +65,20 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_a]:
             self.velocity.x = -self.current_speed
-        if keys[pygame.K_d]:
+            new_animation = 'run' if self.is_sprinting else 'walk'
+            self.facing_right = False
+        elif keys[pygame.K_d]:
             self.velocity.x = self.current_speed
+            new_animation = 'run' if self.is_sprinting else 'walk'
+            self.facing_right = True
+
         if keys[pygame.K_SPACE] and self.is_grounded:
             self.jump()
+            new_animation = 'jump'
+
+        if self.current_animation != new_animation:
+            self.current_animation = new_animation
+            self.current_frame = 0 
 
     def jump(self):
         if self.is_grounded:
@@ -73,13 +113,15 @@ class Player(pygame.sprite.Sprite):
         else:
             self.is_grounded = False
 
+        self.animate()
+
     def draw(self, screen):
         # Draw the player's image
         screen.blit(self.image, self.rect)
         
         # Optionally, draw a rectangle around the player for debugging
-        pygame.draw.rect(screen, self.color, self.rect, 2)
+        #pygame.draw.rect(screen, self.color, self.rect, 2)
         
         # Optionally, draw a dot at the player's center for reference
-        center = self.rect.center
-        pygame.draw.circle(screen, (255, 0, 0), center, 3)
+        #center = self.rect.center
+        #pygame.draw.circle(screen, (255, 0, 0), center, 3)
