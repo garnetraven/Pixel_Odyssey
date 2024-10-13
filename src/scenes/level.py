@@ -25,7 +25,7 @@ class Level(State):
                 if event.key == pygame.K_ESCAPE:
                     self.state_machine.pop() 
 
-    def update(self, dt):
+    def update(self):
         # Pass screen dimensions to ensure player stays within bounds and applies gravity correctly
         screen_width = SCREEN_WIDTH
         screen_height = SCREEN_HEIGHT

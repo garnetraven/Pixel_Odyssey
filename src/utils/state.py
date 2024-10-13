@@ -14,7 +14,7 @@ class State:
         """Handle events for this state."""
         pass
     
-    def update(self, dt):
+    def update(self):
         """Update the state logic."""
         pass
 

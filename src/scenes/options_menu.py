@@ -48,7 +48,7 @@ class OptionsMenu(State):
             )
         print(f"Fullscreen set to {self.fullscreen}")
 
-    def update(self, dt):
+    def update(self):
         """Update logic for the options menu."""
         pass
 

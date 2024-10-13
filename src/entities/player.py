@@ -21,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_RIGHT]:
             self.velocity_x = self.speed
 
-    def update(self, dt, screen_width, screen_height):
+    def update(self):
         """Update the player's position and apply gravity."""
         # Apply gravity to vertical velocity
         self.velocity_y += self.gravity * dt

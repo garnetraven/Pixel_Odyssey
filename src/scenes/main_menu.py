@@ -36,7 +36,7 @@ class MainMenu(State):
                         self.state_machine.pop()
                         pygame.quit()
     
-    def update(self, dt):
+    def update(self):
         """Update logic for the main menu."""
         pass
 

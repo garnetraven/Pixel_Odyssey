@@ -25,9 +25,9 @@ class StateMachine:
         if self.states:
             self.states[-1].handle_events(events)
 
-    def update(self, dt):
+    def update(self):
         if self.states:
-            self.states[-1].update(dt)
+            self.states[-1].update()
 
     def draw(self, screen):
         if self.states:

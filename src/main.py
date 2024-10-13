@@ -1,4 +1,5 @@
 import pygame
+import sys
 from config.constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS 
 from utils.state_machine import StateMachine
 from scenes.main_menu import MainMenu
@@ -20,13 +21,10 @@ class Game:
             for event in events:
                 if event.type == pygame.QUIT:
                     self.running = False
-
-            # Calculate delta time
-            dt = self.clock.tick(FPS) / 1000.0 # Converts milliseconds to seconds
             
             # Handle events, update game state, and draw 
             self.state_machine.handle_events(events)
-            self.state_machine.update(dt)
+            self.state_machine.update()
             self.state_machine.draw(self.screen)
 
             pygame.display.flip()
@@ -34,7 +32,11 @@ class Game:
             # Limit frame rate to FPS
             self.clock.tick(FPS)
 
+        self.close() 
+
+    def close(self):
         pygame.quit()
+        sys.exit()
 
 if __name__ == "__main__":
     game = Game()
