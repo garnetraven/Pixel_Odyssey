@@ -142,9 +142,3 @@ class Player(pygame.sprite.Sprite):
         # Draw the player's image
         screen.blit(self.image, self.rect)
         
-        # Optionally, draw a rectangle around the player for debugging
-        #pygame.draw.rect(screen, self.color, self.rect, 2)
-        
-        # Optionally, draw a dot at the player's center for reference
-        #center = self.rect.center
-        #pygame.draw.circle(screen, (255, 0, 0), center, 3)
