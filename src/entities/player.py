@@ -107,7 +107,7 @@ class Player(pygame.sprite.Sprite):
             self.is_jumping = True
             self.is_grounded = False
 
-    def update(self, terrain_sprites):
+    def move(self):
         # Apply gravity
         self.velocity.y += GRAVITY
 
@@ -118,9 +118,7 @@ class Player(pygame.sprite.Sprite):
         # Update position
         self.rect.x += int(self.velocity.x)
         self.rect.y += int(self.velocity.y)
-
-        self.check_collisions(terrain_sprites)
-        
+       
         # Keep the player within the screen bounds
         if self.rect.left < 0:
             self.rect.left = 0
@@ -136,6 +134,8 @@ class Player(pygame.sprite.Sprite):
         else:
             self.is_grounded = False
 
+    def update(self):
+        self.move() 
         self.animate()
 
     def draw(self, screen):
