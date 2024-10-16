@@ -2,7 +2,7 @@ import pygame
 from config.constants import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, groups, spritesheets: dict, position: tuple) -> None:
+    def __init__(self, groups, spritesheets: dict, position: tuple, parameters: dict) -> None:
         super().__init__(groups)
         self.spritesheets = spritesheets
         self.animations = self.load_animations()
@@ -12,6 +12,11 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animations['idle'][self.current_frame]
         self.rect = self.image.get_rect(topleft = position)
         self.velocity = pygame.math.Vector2()
+        self.health = 100
+
+        # Parameters
+        # Unpacking parameters from dictionary
+        self.group_list = parameters['group_list'], 
 
         # Player stats
         self.base_speed = PLAYER_SPEED
@@ -133,6 +138,10 @@ class Player(pygame.sprite.Sprite):
             self.is_jumping = False
         else:
             self.is_grounded = False
+
+    def handle_death(self):
+        if self.health <= 0:
+            self.kill()
 
     def update(self) -> None:
         self.move() 

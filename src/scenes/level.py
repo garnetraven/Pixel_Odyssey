@@ -6,18 +6,18 @@ from config.constants import *
 from utils.camera import Camera
 from utils.texture_data import player_texture_data
 
-class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos, size) -> None:
-        super().__init__()
-        self.image = pygame.Surface((size, size))
-        self.image.fill((139, 69, 19))  # Brown color for dirt
-        self.rect = self.image.get_rect(topleft = pos)
-
 class Level(State):
     def __init__(self, state_machine) -> None:
         super().__init__(state_machine)
-        self.all_sprites = Camera()
+        self.sprites = Camera()
         self.terrain_sprites = pygame.sprite.Group()
+
+        self.blocks = pygame.sprite.Group()
+        self.enemy_group = pygame.sprite.Group()
+        self.group_list: dict[str, pygame.sprite.Group] = {
+            'block_group':self.blocks,
+            'enemy_group':self.enemy_group
+        }
 
         # Load player spritesheets
         player_spritesheets = {}
@@ -32,9 +32,12 @@ class Level(State):
 
         # Create the player with the loaded spritesheet
         self.player = Player(
-            self.all_sprites,
+            self.sprites,
             player_spritesheets,
-            (100, 100)
+            (100, 100),
+            parameters= {
+                'group_list': self.group_list,
+            }
         )
        
         # Load background image
@@ -44,16 +47,8 @@ class Level(State):
         #self.generate_terrain()
 
     def generate_terrain(self) -> None:
-        x_offset = 50
-        y_offset = 200
-        for row in range(20):
-            for col in range(30):
-                x = col * TILESIZE
-                y = row * TILESIZE
-                tile = Tile((x + x_offset, y + y_offset), TILESIZE)
-                self.terrain_sprites.add(tile)
-                self.all_sprites.add(tile)
-    
+        pass
+
     def enter(self) -> None:
         print("Entering Level")
 
@@ -74,5 +69,4 @@ class Level(State):
 
     def draw(self, screen) -> None:
         screen.blit(self.background, (0, 0))
-        self.terrain_sprites.draw(screen)
         self.player.draw(screen)
