@@ -2,10 +2,10 @@ import pygame
 from entities.player import Player
 
 class Camera(pygame.sprite.Group):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def draw(self, target: Player, display: pygame.Surface):
+    def draw(self, target: Player, display: pygame.Surface) -> None:
         offset = pygame.math.Vector2()
         offset.x = display.get_width() / 2 - target.rect.centerx
         offset.y = display.get_height() / 1.6 - target.rect.centery

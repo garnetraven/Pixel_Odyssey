@@ -2,7 +2,7 @@ import pygame
 from entity import Entity
 
 class Mob(Entity):
-    def __init__(self, groups, image: pygame.Surface, position = (0, 0), parameters = {}):
+    def __init__(self, groups, image: pygame.Surface, position = (0, 0), parameters = {}) -> None:
         super().__init__(groups, image, position)
         
         if parameters:
@@ -14,8 +14,8 @@ class Mob(Entity):
         self.velocity = pygame.math.Vector2()
         self.mass = 5
 
-    def move(self):
+    def move(self) -> None:
         pass
 
-    def update(self):
+    def update(self) -> None:
         self.move()

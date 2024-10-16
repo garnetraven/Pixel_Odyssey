@@ -5,7 +5,7 @@ from scenes.options_menu import OptionsMenu
 from scenes.level import Level
 
 class MainMenu(State):
-    def __init__(self, state_machine):
+    def __init__(self, state_machine) -> None:
         super().__init__(state_machine)
         self.font = pygame.font.SysFont("Arial", 48)
         self.options = ["Start Game", "Options", "Quit"]
@@ -17,15 +17,15 @@ class MainMenu(State):
         self.logo_rect.centerx = SCREEN_WIDTH // 2
         self.logo_rect.top = 50
     
-    def enter(self):
+    def enter(self) -> None:
         """Called when entering the main menu state."""
         print("Entering Main Menu")
 
-    def exit(self):
+    def exit(self) -> None:
         """Called when exiting the main menu state."""
         print("Exiting Main Menu")
 
-    def handle_events(self, events):
+    def handle_events(self, events) -> None:
         """Handle input events for the main menu."""
         for event in events:
             if event.type == pygame.KEYDOWN:
@@ -42,11 +42,11 @@ class MainMenu(State):
                         self.state_machine.pop()
                         pygame.quit()
     
-    def update(self):
+    def update(self) -> None:
         """Update logic for the main menu."""
         pass
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         """Render the main menu."""
         screen.fill((0, 0, 0))  # Clear screen with black
 

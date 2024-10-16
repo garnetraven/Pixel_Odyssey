@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.is_sprinting = False
         self.facing_right = True 
 
-    def load_animations(self):
+    def load_animations(self) -> dict:
         animations = {}
         for key, data in self.spritesheets.items():
             animations[key] = []
@@ -43,7 +43,7 @@ class Player(pygame.sprite.Sprite):
                 animations[key].append(scaled_frame)
         return animations
 
-    def animate(self):
+    def animate(self) -> None:
         self.current_frame += self.animation_speed
         if self.current_frame >= len(self.animations[self.current_animation]):
             self.current_frame = 0
@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
         if not self.facing_right:
             self.image = pygame.transform.flip(self.image, True, False)
 
-    def check_collisions(self, terrain_sprites):
+    def check_collisions(self, terrain_sprites) -> None:
         self.is_grounded = False
         for tile in terrain_sprites:
             if self.rect.colliderect(tile.rect):
@@ -72,7 +72,7 @@ class Player(pygame.sprite.Sprite):
                 elif self.velocity.x < 0:
                     self.rect.left = tile.rect.right
 
-    def handle_input(self, keys):
+    def handle_input(self, keys) -> None:
         self.velocity.x = 0  
         new_animation = 'idle'
         
@@ -101,13 +101,13 @@ class Player(pygame.sprite.Sprite):
             self.current_animation = new_animation
             self.current_frame = 0 
 
-    def jump(self):
+    def jump(self) -> None:
         if self.is_grounded:
             self.velocity.y = -self.jump_strength
             self.is_jumping = True
             self.is_grounded = False
 
-    def move(self):
+    def move(self) -> None:
         # Apply gravity
         self.velocity.y += GRAVITY
 
@@ -134,11 +134,11 @@ class Player(pygame.sprite.Sprite):
         else:
             self.is_grounded = False
 
-    def update(self):
+    def update(self) -> None:
         self.move() 
         self.animate()
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         # Draw the player's image
         screen.blit(self.image, self.rect)
         

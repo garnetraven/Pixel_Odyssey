@@ -7,14 +7,14 @@ from utils.camera import Camera
 from utils.texture_data import player_texture_data
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos, size):
+    def __init__(self, pos, size) -> None:
         super().__init__()
         self.image = pygame.Surface((size, size))
         self.image.fill((139, 69, 19))  # Brown color for dirt
         self.rect = self.image.get_rect(topleft = pos)
 
 class Level(State):
-    def __init__(self, state_machine):
+    def __init__(self, state_machine) -> None:
         super().__init__(state_machine)
         self.all_sprites = Camera()
         self.terrain_sprites = pygame.sprite.Group()
@@ -43,7 +43,7 @@ class Level(State):
 
         #self.generate_terrain()
 
-    def generate_terrain(self):
+    def generate_terrain(self) -> None:
         x_offset = 50
         y_offset = 200
         for row in range(20):
@@ -53,13 +53,14 @@ class Level(State):
                 tile = Tile((x + x_offset, y + y_offset), TILESIZE)
                 self.terrain_sprites.add(tile)
                 self.all_sprites.add(tile)
-    def enter(self):
+    
+    def enter(self) -> None:
         print("Entering Level")
 
-    def exit(self):
+    def exit(self) -> None:
         print("Exiting Level")
 
-    def handle_events(self, events):
+    def handle_events(self, events) -> None:
         keys = pygame.key.get_pressed()
         self.player.handle_input(keys)
 
@@ -68,10 +69,10 @@ class Level(State):
                 if event.key == pygame.K_ESCAPE:
                     self.state_machine.push(PauseMenu(self.state_machine)) 
 
-    def update(self):
-        self.player.update(self.terrain_sprites)
+    def update(self) -> None:
+        self.player.update()
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         screen.blit(self.background, (0, 0))
         self.terrain_sprites.draw(screen)
         self.player.draw(screen)

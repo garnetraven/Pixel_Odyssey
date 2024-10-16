@@ -5,7 +5,7 @@ from utils.state_machine import StateMachine
 from scenes.main_menu import MainMenu
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Pixel Odyssey")
@@ -15,7 +15,7 @@ class Game:
         self.state_machine = StateMachine()
         self.state_machine.push(MainMenu(self.state_machine)) # Push initial state as Main Menu
 
-    def run(self):
+    def run(self) -> None:
         while self.running:
             events = pygame.event.get()
             for event in events:
@@ -34,7 +34,7 @@ class Game:
 
         self.close() 
 
-    def close(self):
+    def close(self) -> None:
         pygame.quit()
         sys.exit()
 
