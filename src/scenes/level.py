@@ -3,6 +3,7 @@ from utils.state import State
 from scenes.pause_menu import PauseMenu
 from entities.player import Player
 from config.constants import *
+from utils.camera import Camera
 from utils.texture_data import player_texture_data
 
 class Tile(pygame.sprite.Sprite):
@@ -15,7 +16,7 @@ class Tile(pygame.sprite.Sprite):
 class Level(State):
     def __init__(self, state_machine):
         super().__init__(state_machine)
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = Camera()
         self.terrain_sprites = pygame.sprite.Group()
 
         # Load player spritesheets
