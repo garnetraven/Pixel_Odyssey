@@ -1,5 +1,7 @@
+from utils.state_machine import StateMachine
+
 class State:
-    def __init__(self, state_machine) -> None:
+    def __init__(self, state_machine: StateMachine) -> None:
         self.state_machine = state_machine
 
     def enter(self) -> None:
