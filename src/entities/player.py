@@ -1,23 +1,22 @@
 import pygame
 
-from config.constants import *
+from typing import Dict, List, Any
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, groups, spritesheets: dict, position: tuple, parameters: dict) -> None:
-        super().__init__(groups)
+from config.constants import *
+from entities.entity import Entity
+
+class Player(Entity):
+    def __init__(self, groups: List[pygame.sprite.Group], image: pygame.Surface, spritesheets: dict, position: tuple, parameters: Dict[str, Any]) -> None:
+        super().__init__(groups, image, position, "player", parameters) 
         self.spritesheets = spritesheets
         self.animations = self.load_animations()
         self.current_frame = 0
         self.animation_speed = 0.2
         self.current_animation = 'idle'
         self.image = self.animations['idle'][self.current_frame]
-        self.rect = self.image.get_rect(topleft = position)
-        self.velocity = pygame.math.Vector2()
-        self.health = 100
 
-        # Parameters
-        # Unpacking parameters from dictionary
-        self.group_list = parameters['group_list'], 
+        # Player-specific parameters
+        self.health = parameters.get['health', 100]
 
         # Player stats
         self.base_speed = PLAYER_SPEED

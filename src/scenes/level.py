@@ -34,6 +34,7 @@ class Level(State):
         # Create the player with the loaded spritesheet
         self.player = Player(
             self.sprites,
+            player_spritesheets['idle'],
             player_spritesheets,
             (100, 100),
             parameters= {
