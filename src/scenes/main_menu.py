@@ -1,4 +1,5 @@
 import pygame
+
 from config.constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from utils.state import State
 from scenes.options_menu import OptionsMenu

@@ -1,4 +1,5 @@
-import python
+import pygame
+
 from typing import Dict, Tuple, Any
 
 class TextureManager:
@@ -6,7 +7,6 @@ class TextureManager:
         self.spritesheets = self._load_spritesheets(spritesheet_data)
         self.atlas_textures = self._load_atlas_textures(atlas_data)
         self.solo_textures = self._load_solo_textures(solo_data)
-        
 
     def _load_spritesheets(self, data: Dict[str, dict]) -> Dict[str, dict]:
         pass

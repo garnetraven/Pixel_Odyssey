@@ -1,4 +1,5 @@
 import pygame
+
 from utils.state import State
 from scenes.options_menu import OptionsMenu
 from config.constants import *

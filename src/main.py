@@ -1,5 +1,6 @@
 import pygame
 import sys
+
 from config.constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS 
 from utils.state_machine import StateMachine
 from scenes.main_menu import MainMenu

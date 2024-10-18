@@ -1,4 +1,5 @@
 import pygame
+
 from entity import Entity
 
 class Mob(Entity):

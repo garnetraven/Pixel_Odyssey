@@ -1,4 +1,5 @@
 import pygame
+
 from utils.state import State
 from scenes.pause_menu import PauseMenu
 from entities.player import Player
