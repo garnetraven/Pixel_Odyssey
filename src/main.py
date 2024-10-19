@@ -1,44 +1,64 @@
 import pygame
 import sys
 
-from config.constants import SCREEN_WIDTH, SCREEN_HEIGHT, FPS 
-from utils.state_machine import StateMachine
-from scenes.main_menu import MainMenu
+from globals import * 
+from utils.events import EventHandler
 
 class Game:
     def __init__(self) -> None:
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Pixel Odyssey")
+
         self.clock = pygame.time.Clock()
+
         self.running = True
 
-        self.state_machine = StateMachine()
-        self.state_machine.push(MainMenu(self.state_machine)) # Push initial state as Main Menu
+        #self.scene = Scene(self)
 
-    def run(self) -> None:
-        while self.running:
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    self.running = False
-            
-            # Handle events, update game state, and draw 
-            self.state_machine.handle_events(events)
-            self.state_machine.update()
-            self.state_machine.draw(self.screen)
+        self.states = {}
+        #    'overworld':self.scene,
+        #    'home_base':HomeBase(self),
+        #    'start':StartMenu(self),
+        #    'world_select':WorldSelect(self),
+        #}
+        self.active_state = 'start'
 
-            pygame.display.flip()
+    def start(self) -> None:
+        self.loop()
+        self.close()
 
-            # Limit frame rate to FPS
-            self.clock.tick(FPS)
+    def loop(self) -> None:
+        self.update()
+        self.draw()
 
-        self.close() 
+    def update(self) -> None:
+        if self.active_state == "quit":
+            self.running = False
+
+        EventHandler.poll_events()
+        
+        if EventHandler.is_closed_requested():
+            self.running = False
+        if EventHandler.keydown(pygame.K_q):
+            self.running = False
+        if EventHandler.keydown(pygame.K_p): # screenshot
+            with open("screenshots/screenshot.txt", 'r') as f:
+                num = int(f.readline())
+                print(num)
+
+        self.states[self.active_state].update()
+
+    def draw(self) -> None:
+        self.states[self.active_state].draw()
+        pygame.display.update()
+        self.clock.tick(FPS)
 
     def close(self) -> None:
+        self.states[self.active_state].close()
         pygame.quit()
         sys.exit()
 
 if __name__ == "__main__":
     game = Game()
-    game.run()
+    game.start()
