@@ -1,6 +1,6 @@
 import pygame
 
-from config.constants import *
+from globals import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, groups, spritesheets: dict, position: tuple, parameters: dict) -> None:
