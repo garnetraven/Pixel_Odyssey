@@ -6,4 +6,5 @@ class Controller:
     up = pygame.K_w
     down = pygame.K_s
     space = pygame.K_SPACE
+    open_inventory = pygame.K_e
 

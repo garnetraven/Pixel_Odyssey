@@ -1,5 +1,5 @@
 import pygame
-from sprites.tile import Tile
+from entities.tile import Tile
 
 class Camera(pygame.sprite.Group):
     def __init__(self):
