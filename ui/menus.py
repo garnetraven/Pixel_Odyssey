@@ -59,11 +59,11 @@ class WorldSelect(State):
     def update(self):
         for button in self.buttons:
             if button.clicked():
-                button.use(self.app)
                 if type(button) == ValueButton:
                     self.app.world_key = button.value
-                    self.app.scene.on_load()
-                    self.app.active_state = 'overworld'
+                    self.app.load_world()
+                else:
+                    button.use(self.app)
 
     def draw(self):
         self.screen.fill('lightblue')
@@ -117,3 +117,93 @@ class ValueButton(Button):
     def __init__(self, screen, text: str, value: str, position: tuple) -> None:
         super().__init__(screen, text, position)
         self.value = value
+
+class PauseMenu(State):
+    def __init__(self, app) -> None:
+        self.app = app
+        self.screen = self.app.screen
+        self.font = pygame.font.Font(None, 45)
+
+        self.title = "Paused"
+        self.title_text = self.font.render(self.title, True, "black", None)
+        self.title_rect = self.title_text.get_rect(center=(app.SCREENWIDTH//2, app.SCREENHEIGHT//2 - TILESIZE*2))
+
+        self.buttons = [
+            StateButton(self.screen, 'Resume', 'overworld', (app.SCREENWIDTH//2, app.SCREENHEIGHT//2)),
+            StateButton(self.screen, 'Options', 'options', (app.SCREENWIDTH//2, app.SCREENHEIGHT//2 + TILESIZE)),
+            StateButton(self.screen, 'Quit to Menu', 'start', (app.SCREENWIDTH//2, app.SCREENHEIGHT//2 + TILESIZE*2)),
+        ]
+
+    def update(self):
+        for button in self.buttons:
+            if button.clicked():
+                if button.state == 'start':
+                    self.quit_to_menu()
+                else:
+                    button.use(self.app)
+                    if button.state == 'overworld':
+                        self.app.unpause()
+
+    def quit_to_menu(self):
+        # Save and close the game scene
+        self.app.quit_to_menu()
+
+    def draw(self):
+        self.app.states['overworld'].draw()  # Draw the game in the background
+        s = pygame.Surface((self.app.SCREENWIDTH, self.app.SCREENHEIGHT))
+        s.set_alpha(128)
+        s.fill((100, 100, 100))
+        self.screen.blit(s, (0, 0))
+
+        self.screen.blit(self.title_text, self.title_rect)
+        for button in self.buttons:
+            button.draw(self.screen)
+
+class OptionsMenu(State):
+    def __init__(self, app) -> None:
+        self.app = app
+        self.screen = self.app.screen
+        self.font = pygame.font.Font(None, 45)
+
+        self.title = "Options"
+        self.title_text = self.font.render(self.title, True, "black", None)
+        self.title_rect = self.title_text.get_rect(center=(app.SCREENWIDTH//2, app.SCREENHEIGHT//2 - TILESIZE*3))
+
+        self.buttons = [
+            StateButton(self.screen, 'Back', 'pause', (app.SCREENWIDTH//2, app.SCREENHEIGHT//2 + TILESIZE*3)),
+        ]
+
+        self.music_volume = app.music_volume
+        self.sfx_volume = app.sfx_volume
+
+    def update(self):
+        for button in self.buttons:
+            if button.clicked():
+                button.use(self.app)
+
+        # Handle volume controls
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.music_volume = max(0, self.music_volume - 1)
+        if keys[pygame.K_RIGHT]:
+            self.music_volume = min(100, self.music_volume + 1)
+        if keys[pygame.K_DOWN]:
+            self.sfx_volume = max(0, self.sfx_volume - 1)
+        if keys[pygame.K_UP]:
+            self.sfx_volume = min(100, self.sfx_volume + 1)
+
+        self.app.music_volume = self.music_volume
+        self.app.sfx_volume = self.sfx_volume
+
+    def draw(self):
+        self.screen.fill('lightblue')
+        self.screen.blit(self.title_text, self.title_rect)
+
+        music_text = self.font.render(f"Music Volume: {self.music_volume}", True, "black")
+        sfx_text = self.font.render(f"SFX Volume: {self.sfx_volume}", True, "black")
+
+        self.screen.blit(music_text, (self.app.SCREENWIDTH//2 - 100, self.app.SCREENHEIGHT//2 - TILESIZE))
+        self.screen.blit(sfx_text, (self.app.SCREENWIDTH//2 - 100, self.app.SCREENHEIGHT//2 + TILESIZE))
+
+        for button in self.buttons:
+            button.draw(self.screen)

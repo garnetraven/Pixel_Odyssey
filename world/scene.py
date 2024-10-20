@@ -16,11 +16,12 @@ import os
 class Scene:
     def __init__(self, app) -> None:
         self.app = app
-        self.screen = self.app.screen # alias for convenience
+        self.screen = self.app.screen
+        self.initialized = False
+        self.setup_groups()
 
-
-
-        # groups
+    def setup_groups(self):
+        # Initialize all the groups here
         self.sprites = Camera()
         self.background_group = ParallaxCamera()
         self.block_group = pygame.sprite.Group()
@@ -29,20 +30,18 @@ class Scene:
         self.wall_group = Camera()
         self.drop_group = Camera()
         self.chest_group = pygame.sprite.Group()
-        # group list
         self.group_list = {
-            'sprites':self.sprites,
-            'block_group':self.block_group,
-            'item_group':self.item_group,
-            'wall_group':self.wall_group,
-            'platform_group':self.platform_group,
-            'chest_group':self.chest_group,
-            'drop_group':self.drop_group,
+            'sprites': self.sprites,
+            'block_group': self.block_group,
+            'item_group': self.item_group,
+            'wall_group': self.wall_group,
+            'platform_group': self.platform_group,
+            'chest_group': self.chest_group,
+            'drop_group': self.drop_group,
         }
 
-        print(len(self.block_group))
     def on_load(self):
-        # world key
+        self.setup_groups()  # Reset all groups
         self.world_key = self.app.world_key
 
         # textures
@@ -50,6 +49,7 @@ class Scene:
         self.textures.update(self.gen_spritesheet_textures(player_textures))
         self.textures.update(self.gen_spritesheet_textures(misc_textures))
         self.inventory_textures = self.gen_inventory_textures(inventory_textures, 'res/atlas/owatlas.png', (TILESIZE*16, TILESIZE*16))
+        
         # inventory
         self.inventory = Inventory(self.app, self.inventory_textures)
 
@@ -59,7 +59,15 @@ class Scene:
         # animation
         self.breaking_block = Animation(self.textures['breaking_block'], (TILESIZE, TILESIZE))
 
-        # temp
+        # player
+        self.create_player()
+
+        # chunking
+        self.initialize_chunks()
+
+        self.initialized = True
+
+    def create_player(self):
         self.player = Player([self.sprites], pygame.Surface((TILESIZE, TILESIZE*2)), (300, 0), {
             'mass':15,
             'speed':15,
@@ -76,7 +84,7 @@ class Scene:
             }
         })
 
-        # chunking
+    def initialize_chunks(self):
         Scene.chunksize = 30
         Scene.chunkpixelsize = self.chunksize*TILESIZE
         Scene.chunkheight = 50
@@ -164,17 +172,15 @@ class Scene:
                 textures[name] = pygame.transform.scale_by(textures[name], 1/(max(textures[name].get_width(), textures[name].get_height())/TILESIZE))
         return textures
     def update(self):
+        if not self.app.paused:
+            self.item_group.update()
+            self.sprites.update()
+            self.inventory.update()
+            self.drop_group.update()
 
-
-        self.item_group.update()
-        self.sprites.update()
-        self.inventory.update()
-        self.drop_group.update()
-
-        # chunking
-
-        self.prev_player_chunk_pos = self.player_chunk_pos
-        self.player_chunk_pos = self.player.rect.x//Scene.chunkpixelsize
+            # chunking
+            self.prev_player_chunk_pos = self.player_chunk_pos
+            self.player_chunk_pos = self.player.rect.x//Scene.chunkpixelsize
 
         if self.prev_player_chunk_pos < self.player_chunk_pos:
             newPos = self.player_chunk_pos+1
@@ -292,9 +298,11 @@ class Scene:
     def get_block_pos(self, position):
         return (int((position[0]//TILESIZE)*TILESIZE), int((position[1]//TILESIZE)*TILESIZE))
     def close(self):
-        self.inventory.close()
-        self.save_chests()
-        self.save_chunks()
+        if self.initialized:
+            self.inventory.close()
+            self.save_chests()
+            self.save_chunks()
+        self.initialized = False
             
 class Chunk:
     def __init__(self, chunk_pos, visible_sprites, blocks, wall_group, textures, scene: Scene, chunk_blocks: list[Tile] = None):
@@ -373,3 +381,4 @@ class Chunk:
                     if col == 2:
                         block_type = 'wood'
                     self.chunk_blocks.append(WallBlock([self.wall_group, self.blocks], image=self.textures[block_type], position=(x,y), name=block_type, special_flags="tree"))
+
