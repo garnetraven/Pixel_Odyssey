@@ -42,12 +42,20 @@ class Player(Tile):
             'player_static':Animation(self.player_textures['player_static'], (TILESIZE, TILESIZE*2), 16),
             #'crouch_idle':Animation(self.player_textures['crouch_idle'], (TILESIZE, TILESIZE*2), 16),
             #'crouch_walk':Animation(self.player_textures['crouch_walk'], (TILESIZE, TILESIZE*2), 16),
-            #'player_walking':Animation(self.player_textures['player_walking'], (TILESIZE, TILESIZE*2), 16),
+            'player_walking':Animation(self.player_textures['player_walking'], (TILESIZE, TILESIZE*2), 16),
             'player_running':Animation(self.player_textures['player_running'], (TILESIZE, TILESIZE*2), 3),
             'player_jumping':Animation(self.player_textures['player_jumping'], (TILESIZE, TILESIZE*2), 10),
             #'player_land':Animation(self.player_textures['player_land'], (TILESIZE, TILESIZE*2), 10),
             #'player_roll':Animation(self.player_textures['player_roll'], (TILESIZE, TILESIZE*2), 10),
         }, 'player_static')
+
+        # Movement speeds
+        self.walk_speed = params['speed']
+        self.run_speed = self.walk_speed * 1.5  # Run speed is 1.5 times walk speed
+        self.current_speed = self.walk_speed
+
+        # State
+        self.is_running = False
 
         # vars
         self.velocity = pygame.math.Vector2()
@@ -65,19 +73,24 @@ class Player(Tile):
     def input(self):
         keys = pygame.key.get_pressed()
 
+        # Check if shift is pressed for running
+        self.is_running = keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]
+        self.current_speed = self.run_speed if self.is_running else self.walk_speed
+
         if keys[Controller.left]:
-            self.velocity.x = -self.speed
+            self.velocity.x = -self.current_speed
             self.moving = True
             self.left = True
             self.right = False
-        if keys[Controller.right]:
-            self.velocity.x = self.speed
+        elif keys[Controller.right]:
+            self.velocity.x = self.current_speed
             self.moving = True
             self.right = True
             self.left = False
-        if not keys[Controller.left] and not keys[Controller.right]:
+        else:
             self.velocity.x = 0
             self.moving = False
+
         if keys[Controller.down]:
             self.down = True
         else:
@@ -89,10 +102,15 @@ class Player(Tile):
             self.animation_manager.set_animation('player_jumping')
 
         # animations
-        if abs(self.velocity.y) < 1 and self.moving and self.animation_manager.active_animation != "player_running":
-            self.animation_manager.set_animation('player_running')
-        if not self.moving:
-            self.animation_manager.set_animation('player_static')
+        if abs(self.velocity.y) < 1:
+            if self.moving:
+                if self.is_running:
+                    self.animation_manager.set_animation('player_running')
+                else:
+                    self.animation_manager.set_animation('player_walking')
+            else:
+                self.animation_manager.set_animation('player_static')
+
     def move(self):
         # gravity
         self.velocity.y += self.mass * GRAVITY

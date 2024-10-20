@@ -79,6 +79,7 @@ class Scene:
             'group_list':self.group_list,
             'player_textures':{
                 'player_static':self.textures['player_static'],
+                'player_walking':self.textures['player_walking'],
                 'player_running':self.textures['player_running'],
                 'player_jumping':self.textures['player_jumping'],
             }

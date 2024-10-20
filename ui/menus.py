@@ -131,7 +131,7 @@ class PauseMenu(State):
         self.buttons = [
             StateButton(self.screen, 'Resume', 'overworld', (app.SCREENWIDTH//2, app.SCREENHEIGHT//2)),
             StateButton(self.screen, 'Options', 'options', (app.SCREENWIDTH//2, app.SCREENHEIGHT//2 + TILESIZE)),
-            StateButton(self.screen, 'Quit to Menu', 'start', (app.SCREENWIDTH//2, app.SCREENHEIGHT//2 + TILESIZE*2)),
+            StateButton(self.screen, 'Save and Quit to Menu', 'start', (app.SCREENWIDTH//2, app.SCREENHEIGHT//2 + TILESIZE*2)),
         ]
 
     def update(self):

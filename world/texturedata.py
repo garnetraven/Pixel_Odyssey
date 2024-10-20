@@ -74,6 +74,7 @@ inventory_textures = {
 }
 player_textures = {
     'player_static':Texture('player_static', (TILESIZE*10, TILESIZE*2), "res/player/player_static.png", "player"),
+    'player_walking':Texture('player_walking', (TILESIZE*8, TILESIZE*2), "res/player/player_walking.png", "player"),
     'player_running':Texture('player_running', (TILESIZE*8, TILESIZE*2), "res/player/player_running.png", "player"),
     'player_jumping':Texture('player_jumping', (TILESIZE*3, TILESIZE*2), "res/player/player_jumping.png", "player"),
 }
