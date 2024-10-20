@@ -40,13 +40,13 @@ class Player(Tile):
         self.player_textures = params['player_textures']
         self.animation_manager = AnimationManager({
             'player_static':Animation(self.player_textures['player_static'], (TILESIZE, TILESIZE*2), 16),
-            'crouch_idle':Animation(self.player_textures['crouch_idle'], (TILESIZE, TILESIZE*2), 16),
-            'crouch_walk':Animation(self.player_textures['crouch_walk'], (TILESIZE, TILESIZE*2), 16),
-            'player_walking':Animation(self.player_textures['player_walking'], (TILESIZE, TILESIZE*2), 16),
+            #'crouch_idle':Animation(self.player_textures['crouch_idle'], (TILESIZE, TILESIZE*2), 16),
+            #'crouch_walk':Animation(self.player_textures['crouch_walk'], (TILESIZE, TILESIZE*2), 16),
+            #'player_walking':Animation(self.player_textures['player_walking'], (TILESIZE, TILESIZE*2), 16),
             'player_running':Animation(self.player_textures['player_running'], (TILESIZE, TILESIZE*2), 3),
             'player_jumping':Animation(self.player_textures['player_jumping'], (TILESIZE, TILESIZE*2), 10),
-            'player_land':Animation(self.player_textures['player_land'], (TILESIZE, TILESIZE*2), 10),
-            'player_roll':Animation(self.player_textures['player_roll'], (TILESIZE, TILESIZE*2), 10),
+            #'player_land':Animation(self.player_textures['player_land'], (TILESIZE, TILESIZE*2), 10),
+            #'player_roll':Animation(self.player_textures['player_roll'], (TILESIZE, TILESIZE*2), 10),
         }, 'player_static')
 
         # vars
@@ -54,12 +54,14 @@ class Player(Tile):
         self.grounded = False
         self.strength = 0
         self.active_block_hardness = 1
+
         # states
         self.moving = False
         self.left = False
         self.right = False
         self.down = False
         self.breaking_block = False
+
     def input(self):
         keys = pygame.key.get_pressed()
 
@@ -151,6 +153,7 @@ class Player(Tile):
                 self.velocity.y = 0.1
             else:
                 self.grounded = False
+
     def block_handling(self):
         mouse_pos = self.get_adjusted_mouse_position()
         mouse_block_pos = self.get_block_pos(mouse_pos)
