@@ -73,9 +73,9 @@ inventory_textures = {
     'diamond':AtlasTexture('diamond', (2,3), (TILESIZE, TILESIZE)),
 }
 player_textures = {
-    'player_static':Texture('player_static', (TILESIZE, TILESIZE*2), "res/player/player_static.png", "player"),
-    'player_running':Texture('player_running', (TILESIZE*2, TILESIZE*2), "res/player/player_running.png", "player"),
-    'player_jumping':Texture('player_jumping', (TILESIZE, TILESIZE*2), "res/player/player_jumping.png", "player"),
+    'player_static':Texture('player_static', (TILESIZE*10, TILESIZE*2), "res/player/player_static.png", "player"),
+    'player_running':Texture('player_running', (TILESIZE*8, TILESIZE*2), "res/player/player_running.png", "player"),
+    'player_jumping':Texture('player_jumping', (TILESIZE*3, TILESIZE*2), "res/player/player_jumping.png", "player"),
 }
 misc_textures = {
     'breaking_block':Texture('breaking_block', (TILESIZE*4, TILESIZE), 'res/block_breaking.png')

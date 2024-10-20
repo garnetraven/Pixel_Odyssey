@@ -39,9 +39,14 @@ class Player(Tile):
         # animations
         self.player_textures = params['player_textures']
         self.animation_manager = AnimationManager({
-            'player_static':Animation(self.player_textures['player_static'], (TILESIZE, TILESIZE*2)),
-            'player_running':Animation(self.player_textures['player_running'], (TILESIZE, TILESIZE*2)),
-            'player_jumping':Animation(self.player_textures['player_jumping'], (TILESIZE, TILESIZE*2)),
+            'player_static':Animation(self.player_textures['player_static'], (TILESIZE, TILESIZE*2), 16),
+            'crouch_idle':Animation(self.player_textures['crouch_idle'], (TILESIZE, TILESIZE*2), 16),
+            'crouch_walk':Animation(self.player_textures['crouch_walk'], (TILESIZE, TILESIZE*2), 16),
+            'player_walking':Animation(self.player_textures['player_walking'], (TILESIZE, TILESIZE*2), 16),
+            'player_running':Animation(self.player_textures['player_running'], (TILESIZE, TILESIZE*2), 3),
+            'player_jumping':Animation(self.player_textures['player_jumping'], (TILESIZE, TILESIZE*2), 10),
+            'player_land':Animation(self.player_textures['player_land'], (TILESIZE, TILESIZE*2), 10),
+            'player_roll':Animation(self.player_textures['player_roll'], (TILESIZE, TILESIZE*2), 10),
         }, 'player_static')
 
         # vars
@@ -237,6 +242,6 @@ class Player(Tile):
         self.item_handling()
         self.animation_manager.update()
         self.image = self.animation_manager.get_active_frame()
-        if self.right:
+        if self.left:
             self.image = pygame.transform.flip(self.image, True, False)
         self.strength = items[self.inventory.active_slot.name].strength
